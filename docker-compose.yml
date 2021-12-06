@@ -1,0 +1,64 @@
+version: "3"
+services:
+  springapp:
+    build: .
+    container_name: messaging-demo-app
+    environment:
+      - POSTGRES_HOST=messaging-postgres-demo-db
+      - RABBITMQ_HOST=messaging-rabbitmq-demo
+    ports:
+      - "8081:8081"
+    networks:
+      - messaging-demo-network
+    depends_on:
+      - postgresdb
+      - rabbitmq3
+    restart: on-failure
+
+  postgresdb:
+    image: postgres:13.2
+    container_name: messaging-postgres-demo-db
+    ports:
+      - "5434:5432"
+    networks:
+      - messaging-demo-network
+    volumes:
+      - messaging-demo-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=messaging_db
+      - PGDATA=/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: user-pgadmin4
+    ports:
+      - "5050:5050"
+    networks:
+      - messaging-demo-network
+    volumes:
+      - messaging-demo-pgadmin-data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+
+  rabbitmq3:
+    image: rabbitmq:3.8-management-alpine
+    container_name: messaging-rabbitmq-demo
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - messaging-demo-network
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+networks:
+  messaging-demo-network:
+
+volumes:
+  messaging-demo-db-data:
+  messaging-demo-pgadmin-data:
