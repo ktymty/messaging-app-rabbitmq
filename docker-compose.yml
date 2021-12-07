@@ -16,8 +16,8 @@ services:
     restart: on-failure
 
   postgresdb:
-    image: postgres:13.2
-    container_name: messaging-postgres-demo-db
+    image: postgres:latest
+    container_name: postgres-messaging-app
     ports:
       - "5434:5432"
     networks:
@@ -31,8 +31,8 @@ services:
       - PGDATA=/var/lib/postgresql/data
 
   pgadmin:
-    image: dpage/pgadmin4
-    container_name: user-pgadmin4
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin4-messaging-app
     ports:
       - "5050:5050"
     networks:
@@ -45,8 +45,8 @@ services:
       - PGADMIN_LISTEN_PORT=5050
 
   rabbitmq3:
-    image: rabbitmq:3.8-management-alpine
-    container_name: messaging-rabbitmq-demo
+    image: rabbitmq:latest
+    container_name: rabbitmq-messaging-app
     ports:
       - "5672:5672"
       - "15672:15672"
