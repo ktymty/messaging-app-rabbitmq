@@ -16,7 +16,7 @@ services:
     restart: on-failure
 
   postgresdb:
-    image: postgres:13.5-alpine
+    image: postgres:13.5
     container_name: postgres-messaging-app
     ports:
       - "5434:5432"
@@ -45,7 +45,7 @@ services:
       - PGADMIN_LISTEN_PORT=5050
 
   rabbitmq3:
-    image: rabbitmq:3.9.11-management-alpine
+    image: rabbitmq:3.9.11-management
     container_name: rabbitmq-messaging-app
     ports:
       - "5672:5672"
